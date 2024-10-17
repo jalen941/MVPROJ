@@ -4,10 +4,10 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
 # Load your model
-model = load_model('cut_bruise.h5')
+model = load_model('cut_bruise_vgg16_transfer.h5')
 
 # Load and preprocess a new image
-img_path = 'cut34.png'  # Change this to the path of your image
+img_path = "cute.jpg"  # Change this to the path of your image
 img = image.load_img(img_path, target_size=(128, 128))  # Resize to match input shape
 img_array = image.img_to_array(img)  # Convert image to array
 img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
@@ -27,7 +27,7 @@ class_names = ['bruise', 'cut']  # This should match the training class order
 #print(f'Predicted Class Index: {predicted_class_index[0]}')
 
 # Set confidence thresholds
-low_confidence_threshold = 0.5  # Below this value, classify as "neither"
+low_confidence_threshold = 0.79  # Below this value, classify as "neither"
 high_confidence_threshold = 0.999  # Above this value, handle specifically
 
 # Check the confidence level

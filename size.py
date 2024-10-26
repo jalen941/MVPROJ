@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 def detect_cut(image_path):
     # Load the image
     img = cv2.imread(image_path)
@@ -23,31 +22,34 @@ def detect_cut(image_path):
     cut_mask = cv2.bitwise_or(cut_mask1, cut_mask2)
 
     # Apply morphological operations to clean up the mask
-    kernel = np.ones((3, 3), np.uint8)  # Smaller kernel for finer details
+    kernel = np.ones((3, 3), np.uint8)
     cut_mask = cv2.morphologyEx(cut_mask, cv2.MORPH_CLOSE, kernel)
     cut_mask = cv2.morphologyEx(cut_mask, cv2.MORPH_OPEN, kernel)
-
-    # Show the mask for debugging
-    cv2.imshow("Cut Mask", cut_mask)
 
     # Find contours
     contours, _ = cv2.findContours(cut_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Check if any contours were found
     if contours:
         # Filter contours to find the largest one
         largest_contour = max(contours, key=cv2.contourArea)
 
-        # Get the bounding box around the largest contour
+        # Get bounding box around the largest contour
         x, y, w, h = cv2.boundingRect(largest_contour)
 
-        # Draw the bounding box on the original image
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 3)  # Red box
+        # Dynamic padding based on contour size
+        padding_factor = min(0.1, 0.05 * (1 + np.log(w * h)))  # Adjust based on area
+        x += int(w * padding_factor)
+        y += int(h * padding_factor)
+        w -= int(2 * w * padding_factor)
+        h -= int(2 * h * padding_factor)
 
-        # Show the original image with the bounding box
+        # Draw the bounding box on the original image
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)  # Red box
+
+        # Show the mask and original image with bounding box for debugging
+        cv2.imshow("Cut Mask", cut_mask)
         cv2.imshow("Detected Cut", img)
 
-        # Wait for a key press and close the image window
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
@@ -56,7 +58,6 @@ def detect_cut(image_path):
         print("No contours found")
         return None
 
-
 # Example usage
-img_path = 'bruise4.jpg'  # Update with the path to your image
+img_path = 'testImg/bruise4.jpg'  # Update with the path to your image
 detect_cut(img_path)

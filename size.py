@@ -59,5 +59,5 @@ def detect_cut(image_path):
         return None
 
 # Example usage
-img_path = 'testImg/bruise4.jpg'  # Update with the path to your image
+img_path = 'testImg/bruise4_minor.jpg'  # Update with the path to your image
 detect_cut(img_path)

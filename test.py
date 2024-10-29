@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing import image
 
 model = load_model('cut_bruise_vgg16_transfer.h5')
 
-img_path = "testImg/cutbig1.jpg"
+img_path = "testImg/cutbig1_severe.jpg"
 img = image.load_img(img_path, target_size=(128, 128))
 img_array = image.img_to_array(img)
 img_array = np.expand_dims(img_array, axis=0)

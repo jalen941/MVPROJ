@@ -50,7 +50,7 @@ for img_name in os.listdir(test_img_dir):
     if predicted_class == true_class:
         correct_predictions += 1
     else:
-        print("predicted", true_class, "wrong")
+        print("predicted", true_class, "wrong on", img_name)
 
     total_images += 1
 
